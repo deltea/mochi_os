@@ -1,4 +1,4 @@
-![Mochi](/images/mochi.png)
+![Mochi](/images/mochi-banner.png)
 
 # 🍡 mochi_os
 
