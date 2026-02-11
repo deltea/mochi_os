@@ -27,6 +27,29 @@ Adafruit_SSD1351 display = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, O
 GFXcanvas16 currentFrame(SCREEN_WIDTH, SCREEN_HEIGHT);
 GFXcanvas16 lastFrame(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+void drawText(const char* text, int16_t x, int16_t y, bool centered = false, const GFXfont* font = nullptr, uint16_t color = FG) {
+  if (font != nullptr) {
+    currentFrame.setFont(font);
+  } else {
+    // monogram font is default
+    currentFrame.setFont(&monogram8pt7b);
+  }
+
+  currentFrame.setTextColor(color);
+
+  int16_t x1, y1;
+  uint16_t w, h;
+
+  if (centered) {
+    currentFrame.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
+    // center horizontally
+    x = x - (w / 2);
+  }
+
+  currentFrame.setCursor(x, y);
+  currentFrame.print(text);
+}
+
 void setup() {
   Serial.begin(115200);
   // SPI.begin();
@@ -40,15 +63,9 @@ void setup() {
   display.setTextColor(FG);
 
   Serial.println("booting...");
-  display.setTextColor(FG);
-  display.setFont(&cute_pixel8pt7b);
-  display.setCursor(SCREEN_WIDTH / 2 - 35 / 2, SCREEN_HEIGHT / 2 - 8);
-  display.println("YUME_OS");
-  display.setFont(&monogram8pt7b);
-  display.setCursor(SCREEN_WIDTH / 2 - 91 / 2, SCREEN_HEIGHT - 10);
-  display.println("booting up...");
+  drawText("mochi_os", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 4, true, &cute_pixel8pt7b, FG);
+  drawText("booting up...", SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10, true, nullptr, FG);
   display.drawRGBBitmap(SCREEN_WIDTH / 2 - 35 / 2 - 18, SCREEN_HEIGHT / 2 - 15, ICON_MUSIC, 16, 9);
-  display.setCursor(0, SCREEN_HEIGHT / 2 + 5);
 
   // // initialize player
   // if (!player.begin()) {
