@@ -22,6 +22,7 @@
 #include "assets/fonts/monogram.h"
 #include "assets/icons.h"
 #include "ui/screen.h"
+#include "ui/player_screen.h"
 
 Adafruit_VS1053_FilePlayer player = Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 Adafruit_SSD1351 display = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_CS, OLED_DC, OLED_RST);
@@ -29,8 +30,13 @@ Adafruit_SSD1351 display = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, O
 GFXcanvas16 currentFrame(SCREEN_WIDTH, SCREEN_HEIGHT);
 GFXcanvas16 lastFrame(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-ScreenType currentScreen = ScreenType::Library;
+State state;
 
+PlayerScreen playerScreen;
+Screen* currentScreen = &playerScreen;
+// ScreenType currentScreenType = ScreenType::NowPlaying;
+
+uint32_t lastFrameTime = 0;
 
 void drawText(const char* text, int16_t x, int16_t y, bool centered = false, const GFXfont* font = nullptr, uint16_t color = FG) {
   if (font != nullptr) {
@@ -89,9 +95,18 @@ void setup() {
   //   while (1);
   // }
   // Serial.println("sd card initialized!");
+
+  currentScreen->init(state);
+  lastFrameTime = millis();
 }
 
 void loop() {
+  uint32_t now = millis();
+  uint32_t deltaMs = now - lastFrameTime;
+  lastFrameTime = now;
+
+  currentScreen->update(state, deltaMs);
+  currentScreen->render(state);
   // if (player.stopped()) {
   //   Serial.println("done playing music");
   //   while (1) {

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <vector>
 
@@ -8,6 +10,7 @@ struct Track {
 };
 
 struct State {
+public:
   std::vector<Track> library;
   std::vector<int> queue;
 
@@ -16,4 +19,7 @@ struct State {
 
   int volume = 50;
   bool isPlaying = false;
+
+  void nextTrack();
+  void previousTrack();
 };
