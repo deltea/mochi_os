@@ -17,15 +17,20 @@
 #include <SD.h>
 #include <Adafruit_SSD1351.h>
 #include <Adafruit_VS1053.h>
-#include "cutepixel.h"
-#include "monogram.h"
-#include "icons.h"
+
+#include "assets/fonts/cutepixel.h"
+#include "assets/fonts/monogram.h"
+#include "assets/icons.h"
+#include "ui/screen.h"
 
 Adafruit_VS1053_FilePlayer player = Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 Adafruit_SSD1351 display = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_CS, OLED_DC, OLED_RST);
 
 GFXcanvas16 currentFrame(SCREEN_WIDTH, SCREEN_HEIGHT);
 GFXcanvas16 lastFrame(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+ScreenType currentScreen = ScreenType::Library;
+
 
 void drawText(const char* text, int16_t x, int16_t y, bool centered = false, const GFXfont* font = nullptr, uint16_t color = FG) {
   if (font != nullptr) {
