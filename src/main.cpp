@@ -1,11 +1,3 @@
-#include <SPI.h>
-#include <SD.h>
-#include <Adafruit_SSD1351.h>
-#include <Adafruit_VS1053.h>
-#include "cutepixel.h"
-#include "monogram.h"
-#include "icons.h"
-
 #define CARDCS 5
 #define VS1053_RESET -1
 #define VS1053_CS 6
@@ -20,6 +12,14 @@
 #define SCREEN_HEIGHT 128
 #define FG 0xFFFF
 #define BG 0x0000
+
+#include <SPI.h>
+#include <SD.h>
+#include <Adafruit_SSD1351.h>
+#include <Adafruit_VS1053.h>
+#include "cutepixel.h"
+#include "monogram.h"
+#include "icons.h"
 
 Adafruit_VS1053_FilePlayer player = Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 Adafruit_SSD1351 display = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_CS, OLED_DC, OLED_RST);
@@ -63,9 +63,9 @@ void setup() {
   display.setTextColor(FG);
 
   Serial.println("booting...");
-  drawText("mochi_os", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 4, true, &cute_pixel8pt7b, FG);
+  drawText("mochi_os", SCREEN_WIDTH / 2 + 8, SCREEN_HEIGHT / 2 - 4, true, &cute_pixel8pt7b, FG);
   drawText("booting up...", SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10, true, nullptr, FG);
-  display.drawRGBBitmap(SCREEN_WIDTH / 2 - 35 / 2 - 18, SCREEN_HEIGHT / 2 - 15, ICON_MUSIC, 16, 9);
+  display.drawRGBBitmap(SCREEN_WIDTH / 2 - 36, SCREEN_HEIGHT / 2 - 11, ICON_MUSIC, 16, 9);
 
   // // initialize player
   // if (!player.begin()) {
