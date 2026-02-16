@@ -1,7 +1,7 @@
 #pragma once
 
 #include "screen.h"
-#include "core/state.h"a
+#include "core/state.h"
 
 class PlayerScreen : public Screen {
 public:

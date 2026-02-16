@@ -1,12 +1,12 @@
-#define CARDCS 5
 #define VS1053_RESET -1
-#define VS1053_CS 6
-#define VS1053_DCS 10
-#define VS1053_DREQ 9
+#define VS1053_CS 32
+#define VS1053_DCS 33
+#define CARD_CS 14
+#define VS1053_DREQ 15
 
-#define OLED_CS 15
-#define OLED_DC 33
-#define OLED_RST 27
+// #define OLED_CS 15
+// #define OLED_DC 33
+// #define OLED_RST 27
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 128
@@ -24,8 +24,8 @@
 #include "ui/screen.h"
 #include "ui/player_screen.h"
 
-Adafruit_VS1053_FilePlayer player = Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
-Adafruit_SSD1351 display = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_CS, OLED_DC, OLED_RST);
+Adafruit_VS1053_FilePlayer player = Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARD_CS);
+// Adafruit_SSD1351 display = Adafruit_SSD1351(SCREEN_WIDTH, SCREEN_HEIGHT, &SPI, OLED_CS, OLED_DC, OLED_RST);
 
 GFXcanvas16 currentFrame(SCREEN_WIDTH, SCREEN_HEIGHT);
 GFXcanvas16 lastFrame(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -62,39 +62,38 @@ void drawText(const char* text, int16_t x, int16_t y, bool centered = false, con
 }
 
 void setup() {
-  Serial.begin(115200);
-  // SPI.begin();
-  // SPI.setFrequency(40000000);
+  Serial.begin(9600);
+  // SPI.begin(5, 21, 19, -1);
   delay(500);
 
   // initialize display
-  display.begin();
-  display.fillScreen(BG);
-  display.setSPISpeed(8000000);
-  display.setTextColor(FG);
+  // display.begin();
+  // display.fillScreen(BG);
+  // display.setSPISpeed(8000000);
+  // display.setTextColor(FG);
 
-  Serial.println("booting...");
-  drawText("mochi_os", SCREEN_WIDTH / 2 + 8, SCREEN_HEIGHT / 2 - 4, true, &cute_pixel8pt7b, FG);
-  drawText("booting up...", SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10, true, nullptr, FG);
-  display.drawRGBBitmap(SCREEN_WIDTH / 2 - 36, SCREEN_HEIGHT / 2 - 11, ICON_MUSIC, 16, 9);
+  // Serial.println("booting...");
+  // drawText("mochi_os", SCREEN_WIDTH / 2 + 8, SCREEN_HEIGHT / 2 - 4, true, &cute_pixel8pt7b, FG);
+  // drawText("booting up...", SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10, true, nullptr, FG);
+  // display.drawRGBBitmap(SCREEN_WIDTH / 2 - 36, SCREEN_HEIGHT / 2 - 11, ICON_MUSIC, 16, 9);
 
-  // // initialize player
-  // if (!player.begin()) {
-  //   Serial.println("couldn't find vs1053, do you have the right pins defined?");
-  //   while (1);
-  // }
-  // Serial.println("player initialized!");
+  // initialize player
+  if (!player.begin()) {
+    Serial.println("couldn't find vs1053, do you have the right pins defined?");
+    while (1);
+  }
+  Serial.println("player initialized!");
 
-  // // a tone to make sure the player is working
-  // player.setVolume(10, 10);
-  // player.sineTest(0x44, 500);
+  // a tone to make sure the player is working
+  player.setVolume(10, 10);
+  player.sineTest(0x44, 500);
 
-  // // initialize sd card reader
-  // if (!SD.begin(CARDCS)) {
-  //   Serial.println("sd read failed, or not present");
-  //   while (1);
-  // }
-  // Serial.println("sd card initialized!");
+  // initialize sd card reader
+  if (!SD.begin(CARD_CS)) {
+    Serial.println("sd read failed, or not present");
+    while (1);
+  }
+  Serial.println("sd card initialized!");
 
   currentScreen->init(state);
   lastFrameTime = millis();
@@ -107,41 +106,41 @@ void loop() {
 
   currentScreen->update(state, deltaMs);
   currentScreen->render(state);
-  // if (player.stopped()) {
-  //   Serial.println("done playing music");
-  //   while (1) {
-  //     delay(10);
-  //   }
-  // }
+  if (player.stopped()) {
+    Serial.println("done playing music");
+    while (1) {
+      delay(10);
+    }
+  }
   if (Serial.available()) {
     // read input from the serial console
     char c = Serial.read();
 
     if (c == 's') {
-      // player.stopPlaying();
+      player.stopPlaying();
     }
     if (c == 'p') {
       if (!player.paused()) {
         Serial.println("paused");
-        // player.pausePlaying(true);
+        player.pausePlaying(true);
       } else {
         Serial.println("resumed");
-        // player.pausePlaying(false);
+        player.pausePlaying(false);
       }
     }
   }
 
   // display updating
-  uint16_t* curr = currentFrame.getBuffer();
-  uint16_t* prev = lastFrame.getBuffer();
+  // uint16_t* curr = currentFrame.getBuffer();
+  // uint16_t* prev = lastFrame.getBuffer();
 
-  for (int y = 0; y < SCREEN_HEIGHT; y++) {
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-      int index = y * SCREEN_WIDTH + x;
-      if (curr[index] != prev[index]) {
-        display.drawPixel(x, y, curr[index]);
-        prev[index] = curr[index];
-      }
-    }
-  }
+  // for (int y = 0; y < SCREEN_HEIGHT; y++) {
+  //   for (int x = 0; x < SCREEN_WIDTH; x++) {
+  //     int index = y * SCREEN_WIDTH + x;
+  //     if (curr[index] != prev[index]) {
+  //       display.drawPixel(x, y, curr[index]);
+  //       prev[index] = curr[index];
+  //     }
+  //   }
+  // }
 }
