@@ -1,12 +1,12 @@
-#define VS1053_RESET -1
+#define VS1053_RESET 27
 #define VS1053_CS 32
 #define VS1053_DCS 33
 #define CARD_CS 14
 #define VS1053_DREQ 15
 
-// #define OLED_CS 15
-// #define OLED_DC 33
-// #define OLED_RST 27
+#define OLED_CS 15
+#define OLED_DC 33
+#define OLED_RST 27
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 128
@@ -62,8 +62,8 @@ void drawText(const char* text, int16_t x, int16_t y, bool centered = false, con
 }
 
 void setup() {
-  Serial.begin(9600);
-  // SPI.begin(5, 21, 19, -1);
+  Serial.begin(115200);
+  while (!Serial) { delay(1); }
   delay(500);
 
   // initialize display
@@ -85,7 +85,6 @@ void setup() {
   Serial.println("player initialized!");
 
   // a tone to make sure the player is working
-  player.setVolume(10, 10);
   player.sineTest(0x44, 500);
 
   // initialize sd card reader
@@ -94,6 +93,12 @@ void setup() {
     while (1);
   }
   Serial.println("sd card initialized!");
+
+  player.setVolume(60, 60);
+
+  // player.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
+  player.playFullFile("/track001.mp3");
+  player.playFullFile("/track002.mp3");
 
   currentScreen->init(state);
   lastFrameTime = millis();
