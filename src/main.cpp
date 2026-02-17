@@ -85,7 +85,7 @@ void setup() {
   Serial.println("player initialized!");
 
   // a tone to make sure the player is working
-  player.sineTest(0x22, 200);
+  // player.sineTest(0x22, 200);
 
   // initialize sd card reader
   if (!SD.begin(CARD_CS)) {
