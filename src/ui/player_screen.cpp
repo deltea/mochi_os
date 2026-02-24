@@ -11,5 +11,5 @@ void PlayerScreen::update(State &state, uint32_t deltaMs) {
 }
 
 void PlayerScreen::render(State &state) {
-  canvas.fillScreen(BG);
+  // canvas.fillScreen(BG);
 }

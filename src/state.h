@@ -6,6 +6,8 @@
 struct Track {
   std::string name;
   std::string artist;
+  std::string cover_path;
+  std::string audio_path;
   uint32_t duration_ms;
 };
 

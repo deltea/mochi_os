@@ -1,6 +1,7 @@
 #include <SD.h>
 #include "sd.h"
 #include "constants.h"
+#include <state.h>
 
 void initSD() {
   if (!SD.begin(CARD_CS)) {
@@ -27,3 +28,14 @@ void listPlaylists() {
   }
   Serial.println("done listing");
 }
+
+// Track getTrackFromPath(const char *path) {
+//   Track track;
+//   File jsonFile = SD.open(path);
+//   if (!jsonFile) {
+//     Serial.println("failed to open track file: " + String(path));
+//     return Track();
+//   }
+
+//   return track;
+// }

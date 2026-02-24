@@ -25,6 +25,26 @@ void drawBoot() {
   updateDisplay();
 }
 
+void drawCover(std::string path) {
+  File cover = SD.open(path.c_str());
+  if (!cover) {
+    Serial.println("couldn't open cover file");
+    return;
+  }
+
+  if (cover.available()) {
+    uint16_t* coverBuffer = (uint16_t*)malloc(86 * 86 * sizeof(uint16_t));
+    cover.read((uint8_t*)coverBuffer, 86 * 86 * sizeof(uint16_t));
+    canvas.drawRGBBitmap(SCREEN_WIDTH / 2 - 43, SCREEN_HEIGHT / 3 - 38, coverBuffer, 86, 86);
+  }
+  cover.close();
+}
+
+void playTrack(Track track) {
+  playFile(track.audio_path.c_str());
+  drawCover(track.cover_path);
+}
+
 void setup() {
   Serial.begin(115200);
   while (!Serial) { delay(1); }
@@ -36,8 +56,14 @@ void setup() {
   initSD();
   listPlaylists();
 
-  playFile("/track006.mp3");
-  // playFile("/track005.mp3");
+  Track americanIdiot = {
+    "American Idiot",
+    "Green Day",
+    "/tracks/American Idiot/cover.raw",
+    "/tracks/American Idiot/audio.mp3"
+  };
+
+  playTrack(americanIdiot);
 
   currentScreen->init(state);
   lastFrameTime = millis();
