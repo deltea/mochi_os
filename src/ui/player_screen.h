@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Adafruit_GFX.h>
+
 #include "screen.h"
 #include "core/state.h"
 
