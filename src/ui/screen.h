@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/state.h"
+#include "state.h"
 
 enum class ScreenType {
   Library,

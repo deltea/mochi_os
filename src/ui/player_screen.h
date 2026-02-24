@@ -3,7 +3,7 @@
 #include <Adafruit_GFX.h>
 
 #include "screen.h"
-#include "core/state.h"
+#include "state.h"
 
 class PlayerScreen : public Screen {
 public:
