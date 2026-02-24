@@ -41,7 +41,8 @@ void setup() {
 
   // player.playFullFile("/track001.mp3");
   // player.playFullFile("/track002.mp3");
-  playFile("/track001.mp3");
+  playFile("/track006.mp3");
+  // playFile("/track005.mp3");
 
   currentScreen->init(state);
   lastFrameTime = millis();
@@ -56,4 +57,5 @@ void loop() {
   currentScreen->render(state);
 
   updateDisplay();
+  updatePlayer();
 }

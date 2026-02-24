@@ -6,3 +6,4 @@ extern Adafruit_VS1053_FilePlayer player;
 
 void initAudio();
 void playFile(const char* path);
+void updatePlayer();

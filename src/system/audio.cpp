@@ -10,11 +10,16 @@ void initAudio() {
   }
   Serial.println("player initialized!");
 
-  player.setVolume(60, 60);
-  // player.useInterrupt(VS1053_FILEPLAYER_TIMER0_INT);
+  // higher number means quieter for some reason
+  player.setVolume(65, 65);
   // player.sineTest(0x22, 200);
 }
 
 void playFile(const char* path) {
-  player.playFullFile(path);
+  // player.useInterrupt(VS1053_FILEPLAYER_TIMER0_INT);
+  player.startPlayingFile(path);
+}
+
+void updatePlayer() {
+  player.feedBuffer();
 }
