@@ -34,9 +34,10 @@ void setup() {
   drawBoot();
   initAudio();
   initSD();
+  listPlaylists();
 
-  // playFile("/track006.mp3");
-  playFile("/track005.mp3");
+  playFile("/track006.mp3");
+  // playFile("/track005.mp3");
 
   currentScreen->init(state);
   lastFrameTime = millis();
@@ -51,5 +52,5 @@ void loop() {
   currentScreen->render(state);
 
   updateDisplay();
-  updatePlayer();
+  feedPlayer();
 }

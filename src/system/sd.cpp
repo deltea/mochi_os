@@ -9,3 +9,21 @@ void initSD() {
   }
   Serial.println("sd card initialized!");
 }
+
+void listPlaylists() {
+  File root = SD.open("/");
+  if (!root || !root.isDirectory()) {
+    Serial.println("failed to open root");
+    return;
+  }
+
+  File file = root.openNextFile();
+  while (file) {
+    if (file.isDirectory()) {
+      Serial.println("found directory: " + String(file.name()));
+    }
+
+    file = root.openNextFile();
+  }
+  Serial.println("done listing");
+}

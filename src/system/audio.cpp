@@ -20,6 +20,6 @@ void playFile(const char* path) {
   player.startPlayingFile(path);
 }
 
-void updatePlayer() {
+void feedPlayer() {
   player.feedBuffer();
 }
