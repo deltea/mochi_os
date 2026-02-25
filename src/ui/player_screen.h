@@ -10,4 +10,6 @@ public:
   void init(State& state) override;
   void update(State& state, uint32_t deltaMs) override;
   void render(State& state) override;
+
+  void drawCover(std::string path);
 };

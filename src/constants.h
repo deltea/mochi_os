@@ -1,3 +1,5 @@
+#pragma once
+
 #define VS1053_RESET 27
 #define VS1053_CS 32
 #define VS1053_DCS 33
