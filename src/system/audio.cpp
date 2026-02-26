@@ -16,15 +16,28 @@ void Player::init() {
   // p.sineTest(0x22, 200);
 }
 
+void Player::feed() {
+  p.feedBuffer();
+}
+
 void Player::playFile(std::string path) {
   p.startPlayingFile(path.c_str());
 }
 
 void Player::playTrack(Track track) {
-  Serial.println(track.audio_path.c_str());
   playFile(track.audio_path);
 }
 
-void Player::feed() {
-  p.feedBuffer();
+void Player::nextTrack() {
+  if (state.currentTrackIndex < state.queue.size() - 1) {
+    state.currentTrackIndex++;
+    playTrack(state.library[state.queue[state.currentTrackIndex]]);
+  }
+}
+
+void Player::previousTrack() {
+  if (state.currentTrackIndex > 0) {
+    state.currentTrackIndex--;
+    playTrack(state.library[state.queue[state.currentTrackIndex]]);
+  }
 }

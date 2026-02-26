@@ -5,7 +5,7 @@
 #include "system/audio.h"
 
 void PlayerScreen::init(State &state) {
-  state.addPlaylistToQueue(state.playlists[5]);
+  state.addPlaylistToQueue(state.playlists[4]);
   player.playTrack(state.library[state.queue[state.currentTrackIndex]]);
   drawCover(state.library[state.queue[state.currentTrackIndex]].cover_path);
 }
@@ -15,9 +15,11 @@ void PlayerScreen::update(State &state, uint32_t deltaMs) {
   if (Serial.available()) {
     char command = Serial.read();
     if (command == 'n') {
-      // nextTrack();
+      player.nextTrack();
+      drawCover(state.library[state.queue[state.currentTrackIndex]].cover_path);
     } else if (command == 'p') {
-      // previousTrack();
+      player.previousTrack();
+      drawCover(state.library[state.queue[state.currentTrackIndex]].cover_path);
     }
   }
 }

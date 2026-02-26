@@ -8,9 +8,11 @@ extern Adafruit_VS1053_FilePlayer p;
 struct Player {
 public:
   void init();
+  void feed();
   void playFile(std::string path);
   void playTrack(Track track);
-  void feed();
+  void nextTrack();
+  void previousTrack();
 };
 
 extern Player player;
