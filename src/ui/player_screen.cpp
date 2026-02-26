@@ -6,13 +6,22 @@
 #include <system/sd.h>
 
 void PlayerScreen::init(State &state) {
-  state.addPlaylistToQueue(state.playlists[3]);
+  state.addPlaylistToQueue(state.playlists[4]);
+  // play();
   playTrack(getTrackFromPath(state.queue[state.currentTrackIndex].c_str()));
   drawCover(getTrackFromPath(state.queue[state.currentTrackIndex].c_str()).cover_path.c_str());
 }
 
 void PlayerScreen::update(State &state, uint32_t deltaMs) {
-
+  // serial input handling for player controls
+  if (Serial.available()) {
+    char command = Serial.read();
+    if (command == 'n') {
+      nextTrack();
+    } else if (command == 'p') {
+      previousTrack();
+    }
+  }
 }
 
 void PlayerScreen::render(State &state) {

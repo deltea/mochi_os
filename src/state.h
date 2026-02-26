@@ -27,7 +27,7 @@ public:
   int currentTrackIndex = 0;
   uint32_t playbackPositionMs = 0;
 
-  // TODO: actuallyuse this volume
+  // TODO: actually use this volume
   int volume = 50;
   bool isPlaying = false;
 
