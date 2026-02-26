@@ -3,11 +3,12 @@
 #include "system/display.h"
 #include "system/card.h"
 #include "system/audio.h"
+#include "assets/fonts/monogram.h"
 
 void PlayerScreen::init(State &state) {
-  state.addPlaylistToQueue(state.playlists[4]);
+  state.addPlaylistToQueue(state.playlists[3]);
   player.playTrack(state.library[state.queue[state.currentTrackIndex]]);
-  drawCover(state.library[state.queue[state.currentTrackIndex]].cover_path);
+  updateTrack();
 }
 
 void PlayerScreen::update(State &state, uint32_t deltaMs) {
@@ -16,16 +17,23 @@ void PlayerScreen::update(State &state, uint32_t deltaMs) {
     char command = Serial.read();
     if (command == 'n') {
       player.nextTrack();
-      drawCover(state.library[state.queue[state.currentTrackIndex]].cover_path);
+      updateTrack();
     } else if (command == 'p') {
       player.previousTrack();
-      drawCover(state.library[state.queue[state.currentTrackIndex]].cover_path);
+      updateTrack();
     }
   }
 }
 
 void PlayerScreen::render(State &state) {
   // canvas.fillScreen(BG);
+}
+
+void PlayerScreen::updateTrack() {
+  display.clear();
+  drawCover(state.library[state.queue[state.currentTrackIndex]].cover_path);
+  display.drawText(state.library[state.queue[state.currentTrackIndex]].title.c_str(), SCREEN_WIDTH / 2, SCREEN_HEIGHT - 2 - 20, true, &monogram8pt7b, FG);
+  display.drawText(state.library[state.queue[state.currentTrackIndex]].artist.c_str(), SCREEN_WIDTH / 2, SCREEN_HEIGHT - 2 - 20 + 8, true, &monogram8pt7b, FG);
 }
 
 void PlayerScreen::drawCover(std::string path) {

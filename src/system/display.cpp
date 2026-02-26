@@ -16,7 +16,7 @@ void Display::init() {
 }
 
 void Display::clear() {
-  d.fillScreen(BG);
+  canvas.fillScreen(BG);
 }
 
 void Display::update() {

@@ -6,7 +6,8 @@ firmware for my dream mp3 player i'm building!
 
 ## todo
 
+- [ ] make song info scroll
 - [ ] display song data (album art, name, artist)
-- [ ] song queue
+- [x] song queue
 - [x] playlists
 - [x] get audio working

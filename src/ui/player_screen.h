@@ -11,5 +11,6 @@ public:
   void update(State& state, uint32_t deltaMs) override;
   void render(State& state) override;
 
+  void updateTrack();
   void drawCover(std::string path);
 };
