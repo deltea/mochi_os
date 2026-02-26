@@ -1,12 +1,12 @@
 #include "player_screen.h"
-#include <constants.h>
-#include <system/display.h>
-#include <SD.h>
-#include <system/playback.h>
-#include <system/sd.h>
+#include "constants.h"
+#include "system/display.h"
+#include "SD.h"
+#include "core/playback.h"
+#include "system/sd.h"
 
 void PlayerScreen::init(State &state) {
-  state.addPlaylistToQueue(state.playlists[4]);
+  state.addPlaylistToQueue(state.playlists[5]);
   // play();
   playTrack(getTrackFromPath(state.queue[state.currentTrackIndex].c_str()));
   drawCover(getTrackFromPath(state.queue[state.currentTrackIndex].c_str()).cover_path.c_str());

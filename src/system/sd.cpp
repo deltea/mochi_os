@@ -2,7 +2,7 @@
 #include <ArduinoJson.h>
 #include "sd.h"
 #include "constants.h"
-#include "state.h"
+#include "core/state.h"
 
 // initializes and sets up the sd card reader
 void initSD() {

@@ -1,16 +1,15 @@
 #include <SPI.h>
-
 #include "assets/icons.h"
 #include "ui/screen.h"
 #include "ui/player_screen.h"
 #include "constants.h"
 #include "system/display.h"
 #include "system/audio.h"
+#include "system/sd.h"
 #include "assets/fonts/cutepixel.h"
 #include "assets/fonts/monogram.h"
-#include "system/sd.h"
-#include "system/playback.h"
-#include "state.h"
+#include "core/playback.h"
+#include "core/state.h"
 
 PlayerScreen playerScreen;
 Screen* currentScreen = &playerScreen;
@@ -35,21 +34,6 @@ void setup() {
   initAudio();
   initSD();
   indexLibrary();
-
-  // Track americanIdiot = {
-  //   "American Idiot",
-  //   "Green Day",
-  //   "/tracks/American Idiot/cover.raw",
-  //   "/tracks/American Idiot/audio.mp3"
-  // };
-  // Track capableOfLove = {
-  //   "Capable of Love",
-  //   "PinkPantheress",
-  //   "/tracks/Capable of Love/cover.raw",
-  //   "/tracks/Capable of Love/audio.mp3"
-  // };
-
-  // playTrack(americanIdiot);
 
   currentScreen->init(state);
   lastFrameTime = millis();

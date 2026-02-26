@@ -3,7 +3,7 @@
 #include <SD.h>
 #include "display.h"
 #include "audio.h"
-#include "state.h"
+#include "core/state.h"
 #include "sd.h"
 
 void playTrack(Track track) {
