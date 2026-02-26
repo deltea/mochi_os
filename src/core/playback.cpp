@@ -1,8 +1,9 @@
 #include "playback.h"
-#include <constants.h>
 #include <SD.h>
-#include "display.h"
-#include "audio.h"
+#include "constants.h"
+#include "system/display.h"
+#include "system/audio.h"
+#include "system/sd.h"
 #include "core/state.h"
 #include "sd.h"
 
