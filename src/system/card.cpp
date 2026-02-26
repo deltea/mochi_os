@@ -1,11 +1,13 @@
 #include <SD.h>
 #include <ArduinoJson.h>
-#include "sd.h"
+#include "card.h"
 #include "constants.h"
 #include "core/state.h"
 
+Card sd;
+
 // initializes and sets up the sd card reader
-void initSD() {
+void Card::init() {
   if (!SD.begin(CARD_CS)) {
     Serial.println("sd read failed, or not present");
     while (1);
@@ -15,7 +17,7 @@ void initSD() {
 
 // go through the root directory and index everything
 // TODO: i lowk don't need this, just call indexPlaylists and indexTracks directly
-void indexLibrary() {
+void Card::indexLibrary() {
   Serial.println("indexing library...");
   File root = SD.open("/");
   if (!root || !root.isDirectory()) {
@@ -39,7 +41,7 @@ void indexLibrary() {
 }
 
 // go through the tracks directory and index track files
-void indexTracks(std::string tracksDir) {
+void Card::indexTracks(std::string tracksDir) {
   Serial.println("indexing tracks...");
   File dir = SD.open(tracksDir.c_str());
   if (!dir || !dir.isDirectory()) {
@@ -49,7 +51,7 @@ void indexTracks(std::string tracksDir) {
 
   File file = dir.openNextFile();
   while (file) {
-    if (!file.isDirectory()) {
+    if (file.isDirectory()) {
       Serial.println("found track: " + String(file.name()));
       Track track = getTrackFromPath((tracksDir + "/" + file.name()).c_str());
       state.library[file.name()] = track;
@@ -61,7 +63,7 @@ void indexTracks(std::string tracksDir) {
 }
 
 // go through the playlists directory and index playlist files
-void indexPlaylists(std::string playlistDir) {
+void Card::indexPlaylists(std::string playlistDir) {
   Serial.println("indexing playlists...");
   File dir = SD.open(playlistDir.c_str());
   if (!dir || !dir.isDirectory()) {
@@ -83,10 +85,10 @@ void indexPlaylists(std::string playlistDir) {
 }
 
 // returns a track object from a path
-Track getTrackFromPath(const char *path) {
-  File jsonFile = SD.open(("/tracks/" + String(path) + "/track.json").c_str());
+Track Card::getTrackFromPath(std::string path) {
+  File jsonFile = SD.open((path + "/track.json").c_str());
   if (!jsonFile) {
-    Serial.println("failed to open track file: " + String(path));
+    Serial.println(("failed to open track file: " + path).c_str());
     return Track();
   }
 
@@ -104,18 +106,18 @@ Track getTrackFromPath(const char *path) {
   // convert from seconds to ms
   track.duration_ms = doc["duration"].as<uint32_t>() * 1000;
   track.color = doc["color"].as<uint32_t>();
-  track.cover_path = ("/tracks/" + String(path) + "/cover.raw").c_str();
-  track.audio_path = ("/tracks/" + String(path) + "/audio.mp3").c_str();
+  track.cover_path = (path + "/cover.raw").c_str();
+  track.audio_path = (path + "/audio.mp3").c_str();
 
   jsonFile.close();
   return track;
 }
 
 // returns a playlist object from a path
-Playlist getPlaylistFromPath(const char *path) {
-  File jsonFile = SD.open(path);
+Playlist Card::getPlaylistFromPath(std::string path) {
+  File jsonFile = SD.open(path.c_str());
   if (!jsonFile) {
-    Serial.println("failed to open playlist file: " + String(path));
+    Serial.println(("failed to open playlist file: " + path).c_str());
     jsonFile.close();
     return Playlist();
   }

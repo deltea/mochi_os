@@ -1,14 +1,14 @@
 #include <SPI.h>
-#include "assets/icons.h"
-#include "ui/screen.h"
-#include "ui/player_screen.h"
+#include <Adafruit_GFX.h>
 #include "constants.h"
-#include "system/display.h"
-#include "system/audio.h"
-#include "system/sd.h"
+#include "assets/icons.h"
 #include "assets/fonts/cutepixel.h"
 #include "assets/fonts/monogram.h"
-#include "core/playback.h"
+#include "ui/screen.h"
+#include "ui/player_screen.h"
+#include "system/display.h"
+#include "system/audio.h"
+#include "system/card.h"
 #include "core/state.h"
 
 PlayerScreen playerScreen;
@@ -18,10 +18,10 @@ uint32_t lastFrameTime = 0;
 
 void drawBoot() {
   canvas.fillScreen(BG);
-  drawText("mochi_os", SCREEN_WIDTH / 2 + 8, SCREEN_HEIGHT / 2 - 4, true, &cute_pixel8pt7b, FG);
-  drawText("booting up...", SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10, true, nullptr, FG);
+  display.drawText("mochi_os", SCREEN_WIDTH / 2 + 8, SCREEN_HEIGHT / 2 - 4, true, &cute_pixel8pt7b, FG);
+  display.drawText("booting up...", SCREEN_WIDTH / 2, SCREEN_HEIGHT - 10, true, nullptr, FG);
   canvas.drawRGBBitmap(SCREEN_WIDTH / 2 - 36, SCREEN_HEIGHT / 2 - 11, ICON_MUSIC, 16, 9);
-  updateDisplay();
+  display.update();
 }
 
 void setup() {
@@ -29,11 +29,11 @@ void setup() {
   while (!Serial) { delay(1); }
   delay(500);
 
-  initDisplay();
+  display.init();
   drawBoot();
-  initAudio();
-  initSD();
-  indexLibrary();
+  player.init();
+  sd.init();
+  sd.indexLibrary();
 
   currentScreen->init(state);
   lastFrameTime = millis();
@@ -47,6 +47,6 @@ void loop() {
   currentScreen->update(state, deltaMs);
   currentScreen->render(state);
 
-  updateDisplay();
-  feedPlayer();
+  display.update();
+  player.feed();
 }

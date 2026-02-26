@@ -1,25 +1,30 @@
 #include "audio.h"
 #include <constants.h>
 
-Adafruit_VS1053_FilePlayer player(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARD_CS);
+Adafruit_VS1053_FilePlayer p(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARD_CS);
+Player player;
 
-void initAudio() {
-  if (!player.begin()) {
+void Player::init() {
+  if (!p.begin()) {
     Serial.println("couldn't find vs1053, do you have the right pins defined?");
     while (1);
   }
   Serial.println("player initialized!");
 
   // higher number means quieter for some reason
-  player.setVolume(65, 65);
-  // player.sineTest(0x22, 200);
+  p.setVolume(65, 65);
+  // p.sineTest(0x22, 200);
 }
 
-void playFile(const char* path) {
-  // player.useInterrupt(VS1053_FILEPLAYER_TIMER0_INT);
-  player.startPlayingFile(path);
+void Player::playFile(std::string path) {
+  p.startPlayingFile(path.c_str());
 }
 
-void feedPlayer() {
-  player.feedBuffer();
+void Player::playTrack(Track track) {
+  Serial.println(track.audio_path.c_str());
+  playFile(track.audio_path);
+}
+
+void Player::feed() {
+  p.feedBuffer();
 }

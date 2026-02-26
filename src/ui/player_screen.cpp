@@ -1,15 +1,13 @@
 #include "player_screen.h"
 #include "constants.h"
 #include "system/display.h"
-#include "SD.h"
-#include "core/playback.h"
-#include "system/sd.h"
+#include "system/card.h"
+#include "system/audio.h"
 
 void PlayerScreen::init(State &state) {
   state.addPlaylistToQueue(state.playlists[5]);
-  // play();
-  playTrack(getTrackFromPath(state.queue[state.currentTrackIndex].c_str()));
-  drawCover(getTrackFromPath(state.queue[state.currentTrackIndex].c_str()).cover_path.c_str());
+  player.playTrack(state.library[state.queue[state.currentTrackIndex]]);
+  drawCover(state.library[state.queue[state.currentTrackIndex]].cover_path);
 }
 
 void PlayerScreen::update(State &state, uint32_t deltaMs) {
@@ -17,9 +15,9 @@ void PlayerScreen::update(State &state, uint32_t deltaMs) {
   if (Serial.available()) {
     char command = Serial.read();
     if (command == 'n') {
-      nextTrack();
+      // nextTrack();
     } else if (command == 'p') {
-      previousTrack();
+      // previousTrack();
     }
   }
 }
@@ -37,8 +35,11 @@ void PlayerScreen::drawCover(std::string path) {
 
   if (cover.available()) {
     uint16_t* coverBuffer = (uint16_t*)malloc(86 * 86 * sizeof(uint16_t));
-    cover.read((uint8_t*)coverBuffer, 86 * 86 * sizeof(uint16_t));
-    canvas.drawRGBBitmap(SCREEN_WIDTH / 2 - 43, SCREEN_HEIGHT / 3 - 38, coverBuffer, 86, 86);
+    if (coverBuffer) {
+      cover.read((uint8_t*)coverBuffer, 86 * 86 * sizeof(uint16_t));
+      canvas.drawRGBBitmap(SCREEN_WIDTH / 2 - 43, SCREEN_HEIGHT / 3 - 38, coverBuffer, 86, 86);
+      free(coverBuffer);
+    }
   }
   cover.close();
 }
